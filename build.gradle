@@ -1,0 +1,49 @@
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'maven'
+
+group = groupName
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+configurations {
+    deployerJars.exclude module: 'commons-codec'
+    deployerJars
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+    deployerJars 'org.springframework.build.aws:org.springframework.build.aws.maven:3.0.0.RELEASE'
+}
+
+idea {
+    project {
+        ipr {
+            withXml {
+                def vcsMapping = it.asNode().component.find { it.@name == 'VcsDirectoryMappings' }.mapping
+                vcsMapping.@vcs = 'Git'
+            }
+        }
+    }
+    module {
+        excludeDirs += [
+                '.gradle', 'build', 'gradle', 'out'
+        ].collect { file("$it") }
+    }
+}
+
+
+uploadArchives {
+    repositories.mavenDeployer {
+        configuration = configurations.deployerJars
+        repository(url: "s3://maven.milanaleksic.net/release") {
+            authentication(userName: s3AccessKey, passphrase: s3SecretAccessKey)
+        }
+    }
+}
+
+

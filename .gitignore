@@ -1,0 +1,15 @@
+# IntelliJ Idea
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# temporary files
+*.log
+*.swp
+*.*~
+
+# generated files
+build
+.gradle
