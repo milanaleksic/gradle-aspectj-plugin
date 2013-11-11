@@ -78,6 +78,7 @@ class Ajc extends DefaultTask {
         ant.iajc(classpath: sourceSet.compileClasspath.asPath, fork: 'true', destDir: sourceSet.output.classesDir.absolutePath,
                 source: project.convention.plugins.java.sourceCompatibility,
                 target: project.convention.plugins.java.targetCompatibility,
+                encoding: 'UTF-8',
                 aspectPath: aspectPath.asPath, sourceRootCopyFilter: '**/*.java', showWeaveInfo: 'true') {
             sourceroots {
                 sourceSet.java.srcDirs.each {
